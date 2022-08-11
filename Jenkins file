@@ -1,25 +1,11 @@
- pipeline {
+pipeline {
     agent any
 
     stages {
-        stage('Hello') {
+        stage('Build') {
             steps {
-                echo 'Hello World'
-            }
-        }
-		stage('Build') {
-            steps {
-                echo 'Build'
-            }
-        }
-		stage('Test') {
-            steps {
-                echo 'Test'
-            }
-        }
-		stage('Deploy') {
-            steps {
-                echo 'Deploy'
+                sh 'make' 
+                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true 
             }
         }
     }
