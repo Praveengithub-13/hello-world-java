@@ -15,7 +15,7 @@ pipeline {
              echo "In Tagging"
                  sh "git checkout -b release-$date +%Y%m%d-${env.BUILD_NUMBER}"
                  sh "git push"
-            }
+              }
             }
        }
 }
