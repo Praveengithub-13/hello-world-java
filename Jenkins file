@@ -1,31 +1,21 @@
 pipeline {
     agent any
-    stages {
-        stage('Build Application') {
+    stages{
+        stage('Checkout code') {
             steps {
-                sh 'mvn -f java-tomcat-sample/pom.xml clean package'
-            }
-            post {
-                success {
-                    echo "Now Archiving the Artifacts...."
-                    archiveArtifacts artifacts: '**/*.war'
+                script{
+                 echo "In Checkout code"
+                 checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'Githubcredentials', url:'https://github.com/Praveengithub-13/hello-world-java.git']]])
+               
                 }
             }
         }
-        stage('Deploy in Staging Environment'){
-            steps{
-                build job: 'Deploy_Application_Staging_Env'
- 
+        stage('Git Tagging') {
+            steps {
+             echo "In Tagging"
+                 sh "git checkout -b release-$date +%Y%m%d-${env.BUILD_NUMBER}"
+                 sh "git push"
+            }
             }
-            
-        }
-        stage('Deploy to Production'){
-            steps{
-                timeout(time:5, unit:'DAYS'){
-                    input message:'Approve PRODUCTION Deployment?'
-                }
-                build job: 'Deploy_Application_Prod_Env'
-            }
-        }
-    }
+       }
 }
