@@ -1,4 +1,4 @@
-ipeline {
+Pipeline {
   agent any
   tools {
     maven 'maven-3.6.3' 
@@ -9,3 +9,5 @@ ipeline {
         sh 'mvn clean package'
       }
     }
+  }
+}
